@@ -6,12 +6,12 @@
 
 int main()
 {
-    CadelDisplay display = cadel_display(20, 20);
+    CadelDisplay display = cadel_display(10, 20);
 
     CadelGraph triangle = (CadelGraph){
         display.dimensions,
         3,
-        { {2, 5}, {6, 2}, {6, 9} }
+        { {2, 15}, {6, 2}, {6, 18} }
     };
 
     for (uint32_t i = 0; i < triangle.size; i++) {
@@ -21,8 +21,8 @@ int main()
 
     cadel_rasterize(&display, &triangle);
 
-    for (size_t x = 0; x < 10; x++) {
-        for (size_t y = 0; y < 10; y++) {
+    for (size_t x = 0; x < display.dimensions.width; x++) {
+        for (size_t y = 0; y < display.dimensions.height; y++) {
             if (display.data[x + (y * triangle.dimensions.width)] == 0) {
                 printf("-");
             } else {
