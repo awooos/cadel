@@ -28,10 +28,7 @@ void cadel_rasterize(CadelDimensions dimensions, uint8_t *dpy, CadelGraph *graph
 
                 if (cadel_between(prev->x, curr->x, x) &&
                         cadel_between(prev->y, curr->y, y)) {
-//                    printf("YES: %u, %u\n", x, y);
                     dpy[(y * dimensions.width) + x] = 1;
-                } else {
-//                    printf("NO:  %u, %u\n", x, y);
                 }
             }
         }
