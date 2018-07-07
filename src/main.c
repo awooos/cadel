@@ -1,4 +1,5 @@
 #include <cadel.h>
+#include <stdint.h>
 #include <stddef.h>
 
 uint8_t cadel_between(uint32_t a, uint32_t b, uint32_t c)
