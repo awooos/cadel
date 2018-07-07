@@ -3,12 +3,6 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-uint8_t cadel_between(uint32_t a, uint32_t b, uint32_t c)
-{
-    return ( ((c >= (a - 1)) && (c <= (b - 1))) ||
-             ((c <= (a - 1)) && (c >= (b - 1))) ) ? 1 : 0;
-}
-
 int32_t cadel_abs(int32_t n)
 {
     return ((n < 0) ? -n : n);
@@ -54,13 +48,7 @@ void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
             CadelPoint point = cadel_point(x, y);
             for (size_t gidx = 1; gidx < graph->size; gidx++) {
                 CadelLine line = cadel_line(points[gidx - 1], points[gidx]);
-                CadelPoint a = line.a;
-                CadelPoint b = line.b;
 
-                /*if (cadel_between(prev->x, curr->x, x) &&
-                        cadel_between(prev->y, curr->y, y)) {
-                    dpy[(y * dimensions.width) + x] = 1;
-                }*/
                 if (cadel_on_line(line, point)) {
                     printf("{(%u, %u), (%u, %u)} does     have (%u, %u)\n",
                             line.a.x,
