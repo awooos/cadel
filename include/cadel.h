@@ -1,7 +1,6 @@
 #ifndef CADEL_H
 #define CADEL_H
 
-#include <stddef.h>
 #include <stdint.h>
 
 typedef struct cadel_point_s {
