@@ -70,28 +70,4 @@ void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
             }
         }
     }
-
-/*        size_t x = prev->x;
-        size_t y = prev->y;
-        while (1) {
-            printf("%u, %u\n", x, y);
-            //dpy[(x * dimensions.width) + y] = 1;
-            dpy[(dimensions.width * x) + y] = 1;
-
-            if ( (x == curr->x) && (y == curr->y) ) {
-                break;
-            }
-
-            if (x < curr->x) {
-                x++;
-            } else if (x > curr->x) {
-                x--;
-            }
-            if (y < curr->y) {
-                y++;
-            } else if (y > curr->y) {
-                y--;
-            }
-        }
-    }*/
 }
