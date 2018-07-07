@@ -9,11 +9,29 @@ int main()
 {
     cadel_init(&malloc, &free);
 
-    CadelGraph triangle = cadel_graph({0, 1}, {1,2}, {3,4});
+    //CadelGraph triangle = cadel_graph({10, 10}, 3, {0, 1}, {1,2}, {3,4});
+    CadelGraph triangle = (CadelGraph){
+        {10, 10},
+        3,
+        { {2, 5}, {6, 2}, {6, 9} }
+    };
 
-    printf("triangle[0] = {%u, %u}\n", triangle[0].x, triangle[0].y);
-    printf("triangle[1] = {%u, %u}\n", triangle[1].x, triangle[1].y);
-    printf("triangle[2] = {%u, %u}\n", triangle[2].x, triangle[2].y);
+    printf("triangle.size       = %u\n", triangle.size);
+    for (uint32_t i = 0; i < triangle.size; i++) {
+        CadelPoint *point = &(triangle.points[i]);
+        printf("triangle.points[%u] = {%u, %u}\n", i, point->x, point->y);
+    }
+
+    uint8_t dpy[10 * 10] = {0,};
+
+    cadel_rasterize((CadelDimensions){10, 10}, dpy, &triangle);
+
+    for (size_t x = 0; x < 10; x++) {
+        for (size_t y = 0; y < 10; y++) {
+            printf("%s", (dpy[x + (y * triangle.dimensions.width)] == 0) ? "-" : "X");
+        }
+        printf("\n");
+    }
 
     return 0;
 }
