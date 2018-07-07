@@ -4,14 +4,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-typedef void *(CadelMallocFn)(size_t size);
-typedef void (CadelFreeFn)(void *ptr);
-
-typedef struct cadel_memory_manager_functions_s {
-    CadelMallocFn *malloc;
-    CadelFreeFn *free;
-} CadelMemoryManagerFunctions;
-
 typedef struct cadel_point_s {
     uint32_t x;
     uint32_t y;
@@ -22,6 +14,11 @@ typedef struct cadel_dimensions_s {
     uint32_t height;
 } CadelDimensions;
 
+typedef struct cadel_display_s {
+    CadelDimensions dimensions;
+    uint8_t *data;
+} CadelDisplay;
+
 typedef CadelPoint CadelPointList[1024];
 typedef struct cadel_graph_s {
     CadelDimensions dimensions;
@@ -29,9 +26,12 @@ typedef struct cadel_graph_s {
     CadelPoint points[1024];
 } CadelGraph;
 
-void cadel_init(CadelMallocFn *mallocfn, CadelFreeFn *freefn);
-void cadel_rasterize(CadelDimensions dimensions, uint8_t *dpy, CadelGraph *graph);
+void cadel_rasterize(CadelDisplay *display, CadelGraph *graph);
+
+#define cadel_dimensions(width, height) ((CadelDimensions){width, height})
 
 #define cadel_graph(dimensions, size, ...) ((CadelGraph){dimensions, size, {__VA_ARGS__}})
+
+#define cadel_display(width, height) ((CadelDisplay){ {width, height}, (uint8_t[width * height]){0,} })
 
 #endif

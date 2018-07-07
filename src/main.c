@@ -1,23 +1,15 @@
 #include <cadel.h>
 
-CadelMemoryManagerFunctions mmfns;
-
-void cadel_init(CadelMallocFn *mallocfn, CadelFreeFn *freefn)
-{
-    mmfns.malloc = mallocfn;
-    mmfns.free = freefn;
-
-//    cadel_platform_init(&mmfns);
-}
-
 uint8_t cadel_between(uint32_t a, uint32_t b, uint32_t c)
 {
     return ( ((c >= (a - 1)) && (c <= (b - 1))) ||
              ((c <= (a - 1)) && (c >= (b - 1))) ) ? 1 : 0;
 }
 
-void cadel_rasterize(CadelDimensions dimensions, uint8_t *dpy, CadelGraph *graph)
+void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
 {
+    uint8_t *dpy = display->data;
+    CadelDimensions dimensions = display->dimensions;
     size_t size = dimensions.width * dimensions.height;
 
     for (size_t y = 0; y < dimensions.height; y++) {
