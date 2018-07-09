@@ -1,5 +1,5 @@
 #//\
-    cd $(dirname $0) && clang -std=c11 -I../include simple.c ../src/*.c -o example-simple && ./example-simple && rm example-simple; exit $?
+    cd $(dirname $0) && clang -std=c11 -pedantic-errors -Wall -I../include simple.c ../src/*.c -o example-simple && ./example-simple && rm example-simple; exit $?
 
 #include <cadel.h>
 #include <stdio.h>
