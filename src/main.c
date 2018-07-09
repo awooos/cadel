@@ -8,51 +8,61 @@ int32_t cadel_abs(int32_t n)
     return ((n < 0) ? -n : n);
 }
 
-bool cadel_on_line(CadelLine line, CadelPoint point)
+void cadel_set_pixel(CadelDisplay *display, uint32_t x, uint32_t y)
+{
+    display->data[(y - 1) * display->dimensions.width + x] = 1;
+}
+
+void cadel_rasterize_horizontal_line(CadelDisplay *display, CadelLine line)
 {
     CadelPoint a = line.a;
     CadelPoint b = line.b;
 
-    int32_t dxc = point.x - a.x;
-    int32_t dyc = point.y - a.y;
+    int32_t offset = ((a.y - b.y) > 0) ? 1 : -1;
+    for (uint32_t y = a.y; y != b.y; y += offset) {
+        cadel_set_pixel(display, a.x, y);
+    }
+}
 
-    int32_t dxl = b.x - a.x;
-    int32_t dyl = b.y - a.y;
+void cadel_rasterize_vertical_line(CadelDisplay *display, CadelLine line)
+{
+    CadelPoint a = line.a;
+    CadelPoint b = line.b;
 
-    int32_t cross = dxc * dyl - dyc * dxl;
+    int32_t offset = ((a.x - b.x) > 0) ? 1 : -1;
+    for (uint32_t x = a.x; x != b.x; x += offset) {
+        cadel_set_pixel(display, x, a.y);
+    }
+}
 
-    if (cross != 0) {
-        return false;
+void cadel_rasterize_line(CadelDisplay *display, CadelLine line)
+{
+    CadelPoint a = line.a;
+    CadelPoint b = line.b;
+
+    // Handle horizontal lines.
+    if (a.x == b.x) {
+        cadel_rasterize_horizontal_line(display, line);
+        return;
     }
 
-    if (cadel_abs(dxl) >= cadel_abs(dyl)) {
-        return (dxl > 0) ?
-            (a.x <= point.x && point.x <= b.x) :
-            (b.x <= point.x && point.x <= a.x);
-    } else {
-        return (dyl > 0) ?
-            (a.y <= point.y && point.y <= b.y) :
-            (b.y <= point.y && point.y <= a.y);
+    // Handle vertical lines.
+    if (a.y == b.y) {
+        cadel_rasterize_vertical_line(display, line);
+        return;
     }
+
+    // TODO: Handle everything else.
 }
 
 void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
 {
-    uint8_t *dpy = display->data;
     CadelDimensions dimensions = display->dimensions;
-    size_t size = dimensions.width * dimensions.height;
     CadelPoint *points = graph->points;
 
-    for (size_t y = 0; y < dimensions.height; y++) {
-        for (size_t x = 0; x < dimensions.width; x++) {
-            CadelPoint point = cadel_point(x, y);
-            for (size_t gidx = 1; gidx < graph->size; gidx++) {
-                CadelLine line = cadel_line(points[gidx - 1], points[gidx]);
+    for (size_t gidx = 1; gidx < graph->size; gidx++) {
+        CadelLine line = cadel_line(points[gidx - 1], points[gidx]);
 
-                if (cadel_on_line(line, point)) {
-                    dpy[((y - 1) * dimensions.width) + x] = 1;
-                }
-            }
-        }
+        cadel_rasterize_line(display, line);
     }
 }
