@@ -50,22 +50,7 @@ void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
                 CadelLine line = cadel_line(points[gidx - 1], points[gidx]);
 
                 if (cadel_on_line(line, point)) {
-                    printf("{(%u, %u), (%u, %u)} does     have (%u, %u)\n",
-                            line.a.x,
-                            line.a.y,
-                            line.b.x,
-                            line.b.y,
-                            point.x,
-                            point.y);
                     dpy[((y - 1) * dimensions.width) + x] = 1;
-                } else {
-                    printf("{(%u, %u), (%u, %u)} does not have (%u, %u)\n",
-                            line.a.x,
-                            line.a.y,
-                            line.b.x,
-                            line.b.y,
-                            point.x,
-                            point.y);
                 }
             }
         }
