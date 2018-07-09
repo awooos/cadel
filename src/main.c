@@ -1,7 +1,6 @@
 #include <cadel.h>
 #include <stdint.h>
 #include <stddef.h>
-#include <stdbool.h>
 
 int32_t cadel_abs(int32_t n)
 {
@@ -57,7 +56,6 @@ void cadel_rasterize_line(CadelDisplay *display, CadelLine line)
 
 void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
 {
-    CadelDimensions dimensions = display->dimensions;
     CadelPoint *points = graph->points;
 
     for (size_t gidx = 1; gidx < graph->size; gidx++) {
