@@ -15,7 +15,6 @@ typedef struct cadel_dimensions_s {
 } CadelDimensions;
 #define cadel_dimensions(width, height) ((CadelDimensions){width, height})
 
-typedef CadelPoint CadelPointList[1024];
 typedef struct cadel_graph_s {
     CadelDimensions dimensions;
     int64_t size;
