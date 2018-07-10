@@ -29,6 +29,7 @@ typedef struct cadel_display_s {
 } CadelDisplay;
 #define cadel_display(width, height) ((CadelDisplay){ {width, height}, (uint8_t[width * height]){0,} })
 
+uint8_t cadel_get_pixel(CadelDisplay *display, int64_t x, int64_t y);
 void cadel_render(CadelDisplay *display, CadelGraph *graph);
 
 #endif
