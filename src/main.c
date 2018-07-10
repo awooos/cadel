@@ -22,25 +22,6 @@ void cadel_set_pixel(CadelDisplay *display, uint64_t x, uint64_t y)
     display->data[y_idx + x] = 1;
 }
 
-// Renders a horizontal line to a CadelDisplay.
-//
-// Assumptions:
-// - x coordinates are different.
-// - y coordinates are the same.
-void cadel_rasterize_horizontal_line(CadelDisplay *display,
-        CadelPoint a,
-        CadelPoint b)
-{
-    if (a.x > b.x) {
-        cadel_rasterize_horizontal_line(display, b, a);
-        return;
-    }
-
-    for (uint64_t x = a.x; x <= b.x; x++) {
-        cadel_set_pixel(display, x, a.y);
-    }
-}
-
 // Renders a vertical line to a CadelDisplay.
 //
 // Assumptions:
@@ -60,14 +41,14 @@ void cadel_rasterize_vertical_line(CadelDisplay *display,
     }
 }
 
-void cadel_rasterize_sloped_line(CadelDisplay *display,
+void cadel_rasterize_line(CadelDisplay *display,
         CadelPoint l,
         CadelPoint r)
 {
     // If +l+ is to the right of +r+, just swap them and render it.
     // This lets us assume we're always going left-to-right later on.
     if (l.x > r.x) {
-        cadel_rasterize_sloped_line(display, r, l);
+        cadel_rasterize_line(display, r, l);
         return;
     }
 
@@ -86,37 +67,20 @@ void cadel_rasterize_sloped_line(CadelDisplay *display,
     int64_t last_y = -1;
     int64_t y;
     for (int64_t x = l.x; x <= r.x; x++) {
+        last_y = (m * (x - 1)) + b;
         y = (m * x) + b;
 
-        if (last_y != -1) {
-            if (cadel_abs(last_y - y) > 1) {
-                cadel_rasterize_vertical_line(display,
-                        cadel_point(x, y - (y - last_y) + 1),
-                        cadel_point(x, last_y + (y - last_y)));
-            }
+        cadel_set_pixel(display, x, y);
+
+        printf("%li - %li = %li\n", last_y, y, last_y - y);
+        if (cadel_abs(last_y - y) <= 1) {
+            continue;
         }
 
-        cadel_set_pixel(display, x, y);
-        last_y = y;
+        cadel_rasterize_vertical_line(display,
+                cadel_point(x, y - (y - last_y) + 1),
+                cadel_point(x, last_y + (y - last_y)));
     }
-
-}
-
-void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
-{
-    // Handle horizontal lines.
-    if (a.y == b.y) {
-        cadel_rasterize_horizontal_line(display, a, b);
-        return;
-    }
-
-    // Handle vertical lines.
-    if (a.x == b.x) {
-        cadel_rasterize_vertical_line(display, a, b);
-        return;
-    }
-
-    cadel_rasterize_sloped_line(display, a, b);
 }
 
 void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
