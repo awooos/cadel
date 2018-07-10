@@ -15,10 +15,10 @@ int main()
           {15, 2} }
     };
 
-    for (size_t i = 0; i < triangle.size; i++) {
+    /*for (size_t i = 0; i < triangle.size; i++) {
         CadelPoint *point = &(triangle.points[i]);
         printf("triangle.points[%lu] = {%lu, %lu}\n", i, point->x, point->y);
-    }
+    }*/
 
     cadel_rasterize(&display, &triangle);
 
