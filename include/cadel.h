@@ -20,6 +20,6 @@ typedef struct cadel_canvas_s {
 
 uint8_t cadel_get_pixel(CadelCanvas canvas, int64_t x, int64_t y);
 void cadel_clear(CadelCanvas canvas);
-void cadel_render(CadelCanvas canvas, CadelObject points);
+void cadel_render_object(CadelCanvas canvas, CadelObject points);
 
 #endif

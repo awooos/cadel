@@ -15,7 +15,7 @@ int main()
         {15, 2});
 
     cadel_clear(canvas);
-    cadel_render(canvas, triangle);
+    cadel_render_object(canvas, triangle);
 
     for (size_t y = 0; y < canvas.height; y++) {
         for (size_t x = 0; x < canvas.width; x++) {

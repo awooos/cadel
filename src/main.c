@@ -1,6 +1,13 @@
 #include <cadel.h>
 #include <stdint.h>
 
+void cadel_clear(CadelCanvas canvas)
+{
+    for (uint64_t i = 0; i < (canvas.width * canvas.height); i++) {
+        canvas.data[i] = 0;
+    }
+}
+
 // Get the value of the pixel at +(x, y)+ on +canvas+.
 uint8_t cadel_get_pixel(CadelCanvas canvas, int64_t x, int64_t y)
 {
@@ -53,14 +60,7 @@ void cadel_render_line(CadelCanvas canvas, CadelPoint l, CadelPoint r)
     }
 }
 
-void cadel_clear(CadelCanvas canvas)
-{
-    for (uint64_t i = 0; i < (canvas.width * canvas.height); i++) {
-        canvas.data[i] = 0;
-    }
-}
-
-void cadel_render(CadelCanvas canvas, CadelObject points)
+void cadel_render_object(CadelCanvas canvas, CadelObject points)
 {
     for (uint64_t idx = 1; !points[idx].terminus; idx++) {
         cadel_render_line(canvas, points[idx - 1], points[idx]);
