@@ -9,10 +9,10 @@ int main()
     CadelCanvas canvas = cadel_canvas(20, 10);
 
     CadelObject triangle = cadel_object(
-        {15, 2},
-        {2, 6},
-        {18, 6},
-        {15, 2});
+            {15, 2},
+            {2, 6},
+            {18, 6},
+            {15, 2});
 
     cadel_clear(canvas);
     cadel_render_object(canvas, triangle);
