@@ -38,32 +38,24 @@ void cadel_render_vertical_line(CadelDisplay *display,
 
 void cadel_render_line(CadelDisplay *display, CadelPoint l, CadelPoint r)
 {
-    // If +l+ is to the right of +r+, just swap them and render it.
-    // This lets us assume we're always going left-to-right later on.
+    // Ensure +l+ is to the left of +r+ by swapping argument order if needed.
     if (l.x > r.x) {
         cadel_render_line(display, r, l);
         return;
     }
 
-    // To generate the +y+ coordinate that goes with a given +x+ coordinate,
-    // use the slope-intercept form of a linear equation:
-    //   y = mx+b
-    // where
-    //   x = x coordinate
-    //   y = y coordinate
-    //   m = slope
-    //   b = y-intercept
-
+    // Use the slope-intercept form of a linear equation (y = mx + b)
+    // to generate +y+ coordinates for a given +x+ coordinate.
     double  m = (double)(r.y - l.y) / (r.x - l.x);
     int64_t b = l.y - (m * l.x);
 
-    int64_t last_y = -1;
-    int64_t y;
     for (int64_t x = l.x; x <= r.x; x++) {
-        last_y = (m * (x - 1)) + b;
-        y = (m * x) + b;
+        int64_t last_y = (m * (x - 1)) + b;
+        int64_t y = (m * x) + b;
 
+        // Draw the exact pixel.
         cadel_set_pixel(display, x, y, 1);
+        // Draw adjacent pixels if needed.
         cadel_render_vertical_line(display, x, y, last_y - y);
     }
 }
