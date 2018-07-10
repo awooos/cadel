@@ -1,23 +1,16 @@
 #include <cadel.h>
 #include <stdint.h>
 
-uint64_t cadel_pixel_index(CadelCanvas canvas, int64_t x, int64_t y)
-{
-    // We use a one-dimensional array to index a two-dimensional plane.
-    // Multiply the vertical coordinate by the width to account for this.
-    return (y * canvas.width) + x;
-}
-
 // Get the value of the pixel at +(x, y)+ on +canvas+.
 uint8_t cadel_get_pixel(CadelCanvas canvas, int64_t x, int64_t y)
 {
-    return canvas.data[cadel_pixel_index(canvas, x, y)];
+    return canvas.data[(y * canvas.width) + x];
 }
 
 // Set the value of the pixel at +(x, y)+ on +canvas+ to +val+.
 void cadel_set_pixel(CadelCanvas canvas, int64_t x, int64_t y, int8_t val)
 {
-    canvas.data[cadel_pixel_index(canvas, x, y)] = val;
+    canvas.data[(y * canvas.width) + x] = val;
 }
 
 // Renders a vertical line to a CadelCanvas.
