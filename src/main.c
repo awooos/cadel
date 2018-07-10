@@ -140,7 +140,7 @@ void cadel_rasterize_sloped_line(CadelDisplay *display, CadelPoint a,
 
         if (cadel_abs(last_y - y) <= 1) {
             cadel_set_pixel(display, x, y);
-        } else if (cadel_abs(last_y - y) > 1) {
+        } else {
         uint8_t old_blah = blah;
         blah = blah + ('A' - '0') - 1;
 
