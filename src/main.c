@@ -103,7 +103,8 @@ void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
     // 2. +a.y != b.y+
     // 3. +a.x <  b.x+
 
-    // We're using the slope-intercept form of a linear equation:
+    // To generate the +y+ coordinate that goes with a given +x+ coordinate,
+    // use the slope-intercept form of a linear equation:
     //   y = mx+b
     // which can be rewritten as:
     //   y = (slope * x) + y_intercept
