@@ -20,6 +20,6 @@ typedef struct cadel_display_s {
 
 uint8_t cadel_get_pixel(CadelDisplay display, int64_t x, int64_t y);
 void cadel_clear(CadelDisplay display);
-void cadel_render(CadelDisplay display, CadelPoint points[]);
+void cadel_render(CadelDisplay display, CadelObject points);
 
 #endif
