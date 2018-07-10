@@ -31,13 +31,9 @@ void cadel_render_line(CadelCanvas canvas, CadelPoint l, CadelPoint r)
         int64_t last_y = (m * (x - 1)) + b;
         int64_t y = (m * x) + b;
 
-        int64_t low = y + 1;
-        int64_t high = last_y + 1;
-        if (y > last_y) {
-            low = last_y;
-            high = y;
-        }
-        if (low < high) {
+        int64_t low  = (y > last_y) ? last_y : (y + 1);
+        int64_t high = (y > last_y) ? y : (last_y + 1);
+        if (low != high) {
             low++;
         }
 
