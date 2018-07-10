@@ -81,13 +81,13 @@ void cadel_rasterize_horizontal_line(CadelDisplay *display,
         CadelPoint a,
         CadelPoint b)
 {
-    if (a.y > b.y) {
+    if (a.x > b.x) {
         cadel_rasterize_horizontal_line(display, b, a);
         return;
     }
 
-    for (uint64_t y = a.y; y <= b.y; y++) {
-        cadel_set_pixel(display, a.x, y);
+    for (uint64_t x = a.x; x <= b.x; x++) {
+        cadel_set_pixel(display, x, a.y);
     }
 }
 
@@ -100,13 +100,13 @@ void cadel_rasterize_vertical_line(CadelDisplay *display,
         CadelPoint a,
         CadelPoint b)
 {
-    if (a.x > b.x) {
+    if (a.y > b.y) {
         cadel_rasterize_vertical_line(display, b, a);
         return;
     }
 
-    for (uint64_t x = a.x; x <= b.x; x++) {
-        cadel_set_pixel(display, x, a.y);
+    for (uint64_t y = a.y; y <= b.y; y++) {
+        cadel_set_pixel(display, a.x, y);
     }
 }
 
@@ -159,13 +159,13 @@ void cadel_rasterize_sloped_line(CadelDisplay *display, CadelPoint a,
 void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
 {
     // Handle horizontal lines.
-    if (a.x == b.x) {
+    if (a.y == b.y) {
         cadel_rasterize_horizontal_line(display, a, b);
         return;
     }
 
     // Handle vertical lines.
-    if (a.y == b.y) {
+    if (a.x == b.x) {
         cadel_rasterize_vertical_line(display, a, b);
         return;
     }
