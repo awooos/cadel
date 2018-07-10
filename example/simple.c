@@ -8,7 +8,7 @@ int main()
 {
     CadelDisplay display = cadel_display(20, 10);
 
-    CadelObject triangle = (CadelObject){
+    CadelObject triangle = {
         display.dimensions,
         4,
         { {15, 2}, {2, 6}, {18, 6},
