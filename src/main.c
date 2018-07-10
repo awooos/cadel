@@ -1,6 +1,5 @@
 #include <cadel.h>
 #include <stdint.h>
-#include <stddef.h>
 
 uint64_t cadel_pixel_index(CadelDisplay *display, int64_t x, int64_t y)
 {
@@ -79,7 +78,7 @@ void cadel_clear(CadelDisplay *display)
 
 void cadel_render(CadelDisplay *display, CadelObject points)
 {
-    for (size_t idx = 1; !points[idx].terminus; idx++) {
+    for (uint64_t idx = 1; !points[idx].terminus; idx++) {
         cadel_render_line(display, points[idx - 1], points[idx]);
     }
 }
