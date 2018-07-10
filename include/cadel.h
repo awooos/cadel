@@ -15,12 +15,12 @@ typedef struct cadel_dimensions_s {
 } CadelDimensions;
 #define cadel_dimensions(width, height) ((CadelDimensions){width, height})
 
-typedef struct cadel_graph_s {
+typedef struct cadel_object_s {
     CadelDimensions dimensions;
     int64_t size;
     CadelPoint points[1024];
-} CadelGraph;
-#define cadel_graph(dimensions, size, ...) ((CadelGraph){dimensions, size, {__VA_ARGS__}})
+} CadelObject;
+#define cadel_object(dimensions, size, ...) ((CadelObject){dimensions, size, {__VA_ARGS__}})
 
 typedef struct cadel_display_s {
     CadelDimensions dimensions;
@@ -29,6 +29,6 @@ typedef struct cadel_display_s {
 #define cadel_display(width, height) ((CadelDisplay){ {width, height}, (uint8_t[width * height]){0,} })
 
 uint8_t cadel_get_pixel(CadelDisplay *display, int64_t x, int64_t y);
-void cadel_render(CadelDisplay *display, CadelGraph *graph);
+void cadel_render(CadelDisplay *display, CadelObject *object);
 
 #endif
