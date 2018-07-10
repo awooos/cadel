@@ -1,7 +1,10 @@
+#define __USE_BSD
+#define _DEFAULT_SOURCE
+
 #include <cadel.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <unistd.h>
 
 void print_canvas(CadelCanvas canvas) {
     for (size_t y = 0; y < canvas.height; y++) {
@@ -16,22 +19,23 @@ void print_canvas(CadelCanvas canvas) {
     }
 }
 
-
 #define rows 40
-#define cols 134
+#define cols 79
 
-CadelPoint a = { 10, 30};
-CadelPoint b = { 65, 10};
-CadelPoint c = {110, 12};
+CadelPoint a = {10, 30};
+CadelPoint b = {40, 10};
+CadelPoint c = {77, 12};
 
-void draw(CadelCanvas canvas, size_t x)
+void draw(CadelCanvas canvas, size_t m)
 {
-    a.x += x;
-    a.y -= x / 2;
-    b.x += x;
-    b.y -= x / 4;
-    c.x += x;
-    c.y -= x / 2;
+    a.x += m;
+    a.y -= m;
+
+    b.x -= m;
+    b.y += m;
+
+    c.x -= m;
+    c.y += m;
 
     CadelObject triangle = cadel_object(a, b, c, a);
 
@@ -39,7 +43,7 @@ void draw(CadelCanvas canvas, size_t x)
     cadel_render_object(canvas, triangle);
     print_canvas(canvas);
 
-    nanosleep({0, 200000}, NULL);
+    sleep(1);
 }
 
 int main(int argc, const char *argv[])
@@ -50,10 +54,10 @@ int main(int argc, const char *argv[])
     size_t x = 0;
     while (1) {
         for (; x < max; x++) {
-            draw(canvas, x);
+            draw(canvas, +1);
         }
         for (; x > -max; x--) {
-            draw(canvas, x);
+            draw(canvas, -1);
         }
     }
 
