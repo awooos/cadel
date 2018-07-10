@@ -22,12 +22,12 @@ uint32_t cadel_y_intercept(uint32_t slope, CadelPoint point)
 //   (x2, y2) is the second coordinate
 //
 // WARNING: Equivalent x coordinates will cause a division-by-zero error.
-int32_t cadel_slope(CadelPoint a, CadelPoint b)
+int64_t cadel_slope(CadelPoint a, CadelPoint b)
 {
-    uint32_t x1 = a.x;
-    uint32_t y1 = a.y;
-    uint32_t x2 = b.x;
-    uint32_t y2 = b.y;
+    int64_t x1 = a.x;
+    int64_t y1 = a.y;
+    int64_t x2 = b.x;
+    int64_t y2 = b.y;
 
     return (y2 - y1) / (x2 - x1);
 }
@@ -101,18 +101,28 @@ void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
     // 2. +a.y != b.y+
     // 3. +a.x <  b.x+
 
-    // need:
-    // - slope
-    // - y intercept
-    //
     // We're using the slope-intercept form of a linear equation:
     //   y = mx+b
     // which can be rewritten as:
     //   y = (slope * x) + y_intercept
+
     uint32_t slope = cadel_slope(a, b);
     uint32_t y_intercept = cadel_y_intercept(slope, a);
 
-    //
+    uint32_t y;
+    printf("\n\n");
+    for (uint32_t x = a.x; x < b.x; x++) {
+        printf("slope = %u\nx     = %u\nb     = %u\n", slope, x, y_intercept);
+        y = (slope * x) + y_intercept;
+        printf("y     = %u\n\n", y);
+        //printf("Rendering: (%u, %u)\n", x, y);
+        //cadel_set_pixel(display, x, y);
+
+        if (y == b.y) {
+            break;
+        }
+    }
+    printf("\n\n");
 }
 
 void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
