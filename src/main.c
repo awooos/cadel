@@ -119,24 +119,10 @@ void cadel_rasterize_sloped_line(CadelDisplay *display, CadelPoint a,
     float slope = cadel_slope(a, b);
     int64_t y_intercept = cadel_y_intercept(slope, a);
 
-    CadelPoint last = {a.x, a.y};
     int64_t y;
     for (int64_t x = a.x; x <= b.x; x++) {
         y = cadel_y(slope, x, y_intercept);
-
-        if (cadel_abs(last.y - y) <= 1) {
-            cadel_set_pixel(display, x, y);
-        } else {
-            uint8_t old_blah = blah;
-            blah = blah + ('A' - '0') - 1;
-
-            cadel_set_pixel(display, x, y);
-
-            blah = old_blah;
-        }
-
-        last.x = x;
-        last.y = y;
+        cadel_set_pixel(display, x, y);
     }
 
 }
