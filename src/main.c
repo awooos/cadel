@@ -27,9 +27,14 @@ void cadel_set_pixel(CadelDisplay *display, int64_t x, int64_t y, int8_t val)
 void cadel_render_vertical_line(CadelDisplay *display,
         int64_t x, int64_t y, int64_t length)
 {
-    int64_t offset = (length > 0) ? +1 : -1;
+    // If we get a negative length, then invert
+    // the y coordinate and negate the length.
+    if (length < 0) {
+        length = -length;
+        y = y - length + 1;
+    }
 
-    for (int64_t i = 0; i != length; i += offset) {
+    for (int64_t i = 0; i < length; i++) {
         cadel_set_pixel(display, x, y + i, 1);
     }
 }
