@@ -9,12 +9,6 @@ typedef struct cadel_point_s {
 } CadelPoint;
 #define cadel_point(x, y) ((CadelPoint){x, y})
 
-typedef struct cadel_line_s {
-    CadelPoint a;
-    CadelPoint b;
-} CadelLine;
-#define cadel_line(a, b) ((CadelLine){a, b})
-
 typedef struct cadel_dimensions_s {
     uint64_t width;
     uint64_t height;
