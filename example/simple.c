@@ -8,14 +8,13 @@ int main()
 {
     CadelDisplay display = cadel_display(20, 10);
 
-    CadelObject triangle = {
-        display.dimensions,
-        4,
-        { {15, 2}, {2, 6}, {18, 6},
-          {15, 2} }
-    };
+    CadelObject triangle = cadel_object(
+        {15, 2},
+        {2, 6},
+        {18, 6},
+        {15, 2});
 
-    cadel_render(&display, &triangle);
+    cadel_render(&display, triangle);
 
     for (size_t y = 0; y < display.dimensions.height; y++) {
         for (size_t x = 0; x < display.dimensions.width; x++) {

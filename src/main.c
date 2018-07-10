@@ -78,11 +78,9 @@ void cadel_clear(CadelDisplay *display)
     }
 }
 
-void cadel_render(CadelDisplay *display, CadelObject *object)
+void cadel_render(CadelDisplay *display, CadelObject points)
 {
-    CadelPoint *points = object->points;
-
-    for (size_t idx = 1; idx < object->size; idx++) {
+    for (size_t idx = 1; !points[idx].terminus; idx++) {
         cadel_render_line(display, points[idx - 1], points[idx]);
     }
 }

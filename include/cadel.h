@@ -6,8 +6,11 @@
 typedef struct cadel_point_s {
     int64_t x;
     int64_t y;
+    uint8_t terminus;
 } CadelPoint;
-#define cadel_point(x, y) ((CadelPoint){x, y})
+#define cadel_point(x, y) ((CadelPoint){x, y, 0})
+
+static CadelPoint CADEL_TERMINUS = {0, 0, 1};
 
 typedef struct cadel_dimensions_s {
     int64_t width;
@@ -15,12 +18,8 @@ typedef struct cadel_dimensions_s {
 } CadelDimensions;
 #define cadel_dimensions(width, height) ((CadelDimensions){width, height})
 
-typedef struct cadel_object_s {
-    CadelDimensions dimensions;
-    int64_t size;
-    CadelPoint points[1024];
-} CadelObject;
-#define cadel_object(dimensions, size, ...) ((CadelObject){dimensions, size, {__VA_ARGS__}})
+typedef CadelPoint CadelObject[1024];
+#define cadel_object(...) {__VA_ARGS__, CADEL_TERMINUS}
 
 typedef struct cadel_display_s {
     CadelDimensions dimensions;
@@ -29,6 +28,6 @@ typedef struct cadel_display_s {
 #define cadel_display(width, height) ((CadelDisplay){ {width, height}, (uint8_t[width * height]){0,} })
 
 uint8_t cadel_get_pixel(CadelDisplay *display, int64_t x, int64_t y);
-void cadel_render(CadelDisplay *display, CadelObject *object);
+void cadel_render(CadelDisplay *display, CadelPoint points[]);
 
 #endif
