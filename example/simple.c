@@ -10,8 +10,9 @@ int main()
 
     CadelGraph triangle = (CadelGraph){
         display.dimensions,
-        3,
-        { {2, 15}, {6, 2}, {6, 18} }
+        4,
+        { {2, 15}, {6, 2}, {6, 18},
+          {2, 15} }
     };
 
     for (size_t i = 0; i < triangle.size; i++) {
