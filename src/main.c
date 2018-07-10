@@ -9,7 +9,11 @@ int32_t cadel_abs(int32_t n)
 
 void cadel_set_pixel(CadelDisplay *display, uint32_t x, uint32_t y)
 {
-    display->data[(y - 1) * display->dimensions.width + x] = 1;
+    // We use a one-dimensional array to index a two-dimensional plane.
+    // Multiply the vertical coordinate by the width to account for this.
+    uint32_t y_idx = (y - 1) * display->dimensions.width;
+
+    display->data[y_idx + x] = 1;
 }
 
 void cadel_rasterize_horizontal_line(CadelDisplay *display, CadelLine line)
