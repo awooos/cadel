@@ -2,13 +2,6 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include <stdio.h>
-
-int64_t cadel_abs(int64_t n)
-{
-    return (n < 0) ? -n : n;
-}
-
 // Set the pixel at the specified (x, y) coordinates on a CadelDisplay.
 //
 // ASSUMPTION: All pixels you don't want rendered are already zero.
