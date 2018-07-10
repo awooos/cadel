@@ -9,8 +9,7 @@
 //   x is the x coordinate
 //   y is the y coordinate
 //   b is the y intercept
-uint32_t cadel_y_intercept(CadelDisplay *display, uint32_t slope,
-        CadelPoint point)
+uint32_t cadel_y_intercept(uint32_t slope, CadelPoint point)
 {
     return (point.y - (slope * point.x));
 }
