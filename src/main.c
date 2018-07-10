@@ -101,7 +101,7 @@ void cadel_rasterize_vertical_line(CadelDisplay *display,
         CadelPoint b)
 {
     if (a.x > b.x) {
-        cadel_rasterize_horizontal_line(display, b, a);
+        cadel_rasterize_vertical_line(display, b, a);
         return;
     }
 
