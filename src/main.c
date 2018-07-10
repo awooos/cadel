@@ -23,21 +23,13 @@ void cadel_set_pixel(CadelDisplay *display, uint64_t x, uint64_t y)
 }
 
 // Renders a vertical line to a CadelDisplay.
-//
-// Assumptions:
-// - x coordinates are the same.
-// - y coordinates are different.
 void cadel_rasterize_vertical_line(CadelDisplay *display,
-        CadelPoint a,
-        CadelPoint b)
+        int64_t x, int64_t y, int64_t length)
 {
-    if (a.y > b.y) {
-        cadel_rasterize_vertical_line(display, b, a);
-        return;
-    }
+    int64_t offset = (length > 0) ? +1 : -1;
 
-    for (uint64_t y = a.y; y <= b.y; y++) {
-        cadel_set_pixel(display, a.x, y);
+    for (int64_t i = 0; i != length; i += offset) {
+        cadel_set_pixel(display, x, y + i);
     }
 }
 
@@ -77,9 +69,7 @@ void cadel_rasterize_line(CadelDisplay *display,
             continue;
         }
 
-        cadel_rasterize_vertical_line(display,
-                cadel_point(x, y - (y - last_y) + 1),
-                cadel_point(x, last_y + (y - last_y)));
+        cadel_rasterize_vertical_line(display, x, last_y + 1, (y - last_y));
     }
 }
 
