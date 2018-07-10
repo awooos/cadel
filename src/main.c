@@ -31,7 +31,12 @@ int64_t cadel_slope(CadelPoint a, CadelPoint b)
     int64_t x2 = b.x;
     int64_t y2 = b.y;
 
-    return (y2 - y1) / (x2 - x1);
+    int64_t diff_y = (y2 - y1);
+    int64_t diff_x = (x2 - x1);
+
+    // Integer division truncates decimals,
+    // so we use modulo to compensate for it.
+    return (diff_y / diff_x) + ((diff_y % diff_x) / 2);
 }
 
 // Set the pixel at the specified (x, y) coordinates on a CadelDisplay.
@@ -56,8 +61,12 @@ void cadel_rasterize_horizontal_line(CadelDisplay *display,
         CadelPoint a,
         CadelPoint b)
 {
-    int64_t offset = ((a.y - b.y) > 0) ? 1 : -1;
-    for (uint64_t y = a.y; y != b.y; y += offset) {
+    if (a.y > b.y) {
+        cadel_rasterize_horizontal_line(display, b, a);
+        return;
+    }
+
+    for (uint64_t y = a.y; y <= b.y; y++) {
         cadel_set_pixel(display, a.x, y);
     }
 }
@@ -71,8 +80,12 @@ void cadel_rasterize_vertical_line(CadelDisplay *display,
         CadelPoint a,
         CadelPoint b)
 {
-    int32_t offset = ((a.x - b.x) > 0) ? 1 : -1;
-    for (uint64_t x = a.x; x != b.x; x += offset) {
+    if (a.x > b.x) {
+        cadel_rasterize_horizontal_line(display, b, a);
+        return;
+    }
+
+    for (uint64_t x = a.x; x <= b.x; x++) {
         cadel_set_pixel(display, x, a.y);
     }
 }
@@ -99,9 +112,8 @@ void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
     }
 
     // If we get this far, the following are all true:
-    // 1. +a.x != b.x+
+    // 1. +a.x <  b.x+
     // 2. +a.y != b.y+
-    // 3. +a.x <  b.x+
 
     // To generate the +y+ coordinate that goes with a given +x+ coordinate,
     // use the slope-intercept form of a linear equation:
@@ -115,7 +127,6 @@ void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
     uint64_t y;
     for (uint64_t x = a.x; x < b.x; x++) {
         y = (slope * x) + y_intercept;
-        printf("Rendering: (%li, %li)\n", x, y);
         cadel_set_pixel(display, x, y);
     }
 }
