@@ -6,9 +6,8 @@
 typedef struct cadel_point_s {
     int64_t x;
     int64_t y;
-    uint8_t terminus;
+    uint8_t terminus; // HACK: If you only specify +{x, y}+, this becomes 0.
 } CadelPoint;
-#define cadel_point(x, y) ((CadelPoint){x, y, 0})
 
 static CadelPoint CADEL_TERMINUS = {0, 0, 1};
 
@@ -16,7 +15,6 @@ typedef struct cadel_dimensions_s {
     int64_t width;
     int64_t height;
 } CadelDimensions;
-#define cadel_dimensions(width, height) ((CadelDimensions){width, height})
 
 typedef CadelPoint CadelObject[1024];
 #define cadel_object(...) {__VA_ARGS__, CADEL_TERMINUS}
