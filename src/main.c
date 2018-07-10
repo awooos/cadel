@@ -117,10 +117,6 @@ void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
         y = (slope * x) + y_intercept;
         printf("Rendering: (%li, %li)\n", x, y);
         cadel_set_pixel(display, x, y);
-
-        if (y == b.y) {
-            break;
-        }
     }
 }
 
