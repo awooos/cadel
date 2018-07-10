@@ -6,6 +6,11 @@
 
 uint8_t blah = 0;
 
+int64_t cadel_abs(int64_t n)
+{
+    return (n < 0) ? -n : n;
+}
+
 // Set the pixel at the specified (x, y) coordinates on a CadelDisplay.
 //
 // ASSUMPTION: All pixels you don't want rendered are already zero.
@@ -80,11 +85,21 @@ void cadel_rasterize_sloped_line(CadelDisplay *display,
     double  m = (double)(r.y - l.y) / (r.x - l.x);
     int64_t b = l.y - (m * l.x);
 
+    int64_t last_y = -1;
     int64_t y;
     for (int64_t x = l.x; x <= r.x; x++) {
         y = (m * x) + b;
-        printf("%li = (%f * %li) + %li\n", y, m, x, b);
+
+        if (last_y != -1) {
+            if (cadel_abs(last_y - y) > 1) {
+                cadel_rasterize_vertical_line(display,
+                        cadel_point(x, y - (y - last_y) + 1),
+                        cadel_point(x, last_y + (y - last_y)));
+            }
+        }
+
         cadel_set_pixel(display, x, y);
+        last_y = y;
     }
 
 }
