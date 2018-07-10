@@ -4,6 +4,18 @@
 
 #include <stdio.h>
 
+// Returns +y+ in
+//   y = (m * x) + b
+// where
+//   m is the slope
+//   x is the x coordinate
+//   y is the y coordinate
+//   b is the y intercept
+int64_t cadel_y(int64_t slope, int64_t x, int64_t y_intercept)
+{
+    return (slope * x) + y_intercept;
+}
+
 // Returns +b+ in
 //   b = y - (m * x)
 // where
@@ -126,7 +138,7 @@ void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
 
     uint64_t y;
     for (uint64_t x = a.x; x < b.x; x++) {
-        y = (slope * x) + y_intercept;
+        y = cadel_y(slope, x, y_intercept);
         cadel_set_pixel(display, x, y);
     }
 }
