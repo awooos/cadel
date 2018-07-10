@@ -4,8 +4,6 @@
 
 #include <stdio.h>
 
-uint8_t blah = 0;
-
 int64_t cadel_abs(int64_t n)
 {
     return (n < 0) ? -n : n;
@@ -21,7 +19,7 @@ void cadel_set_pixel(CadelDisplay *display, uint64_t x, uint64_t y)
     uint64_t y_idx = y * display->dimensions.width;
 
     // Set the pixel to 1, to enable it.
-    display->data[y_idx + x] = blah;//1;
+    display->data[y_idx + x] = 1;
 }
 
 // Renders a horizontal line to a CadelDisplay.
@@ -126,7 +124,6 @@ void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
     CadelPoint *points = graph->points;
 
     for (size_t idx = 1; idx < graph->size; idx++) {
-        blah = idx;
         cadel_rasterize_line(display, points[idx - 1], points[idx]);
     }
 }
