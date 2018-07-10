@@ -79,10 +79,17 @@ void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
         return;
     }
 
+    // If +b+ is to the right of +a+, just swap them and render it.
+    // This lets us assume we're always going left-to-right later on.
     if (a.x > b.x) {
         cadel_rasterize_line(display, b, a);
         return;
     }
+
+    // If we get this far, the following are all true:
+    // 1. +a.x != b.x+
+    // 2. +a.y != b.y+
+    // 3. +a.x <  b.x+
 
     // need:
     // - slope
