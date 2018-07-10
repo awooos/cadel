@@ -63,12 +63,6 @@ void cadel_rasterize_line(CadelDisplay *display,
         y = (m * x) + b;
 
         cadel_set_pixel(display, x, y);
-
-        printf("%li - %li = %li\n", last_y, y, last_y - y);
-        if (cadel_abs(last_y - y) <= 1) {
-            continue;
-        }
-
         cadel_rasterize_vertical_line(display, x, y, last_y - y);
     }
 }
