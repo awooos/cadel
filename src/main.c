@@ -66,7 +66,7 @@ void cadel_set_pixel(CadelDisplay *display, uint64_t x, uint64_t y)
 {
     // We use a one-dimensional array to index a two-dimensional plane.
     // Multiply the vertical coordinate by the width to account for this.
-    int64_t y_idx = (y - 1) * display->dimensions.width;
+    uint64_t y_idx = (y - 1) * display->dimensions.width;
 
     // Set the pixel to 1, to enable it.
     display->data[y_idx + x] = blah;//1;
