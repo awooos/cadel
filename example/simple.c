@@ -22,12 +22,14 @@ int main()
 
     cadel_rasterize(&display, &triangle);
 
+    printf("01234567890123456789\n");
     for (size_t x = 0; x < display.dimensions.width; x++) {
         for (size_t y = 0; y < display.dimensions.height; y++) {
             if (display.data[x + (y * triangle.dimensions.width)] == 0) {
                 printf("-");
             } else {
-                printf("X");
+                //printf("X");
+                printf("%c", display.data[x + (y * triangle.dimensions.width)] + '0');
             }
         }
         printf("\n");

@@ -4,21 +4,21 @@
 #include <stdint.h>
 
 typedef struct cadel_point_s {
-    uint64_t x;
-    uint64_t y;
+    int64_t x;
+    int64_t y;
 } CadelPoint;
 #define cadel_point(x, y) ((CadelPoint){x, y})
 
 typedef struct cadel_dimensions_s {
-    uint64_t width;
-    uint64_t height;
+    int64_t width;
+    int64_t height;
 } CadelDimensions;
 #define cadel_dimensions(width, height) ((CadelDimensions){width, height})
 
 typedef CadelPoint CadelPointList[1024];
 typedef struct cadel_graph_s {
     CadelDimensions dimensions;
-    uint64_t size;
+    int64_t size;
     CadelPoint points[1024];
 } CadelGraph;
 #define cadel_graph(dimensions, size, ...) ((CadelGraph){dimensions, size, {__VA_ARGS__}})

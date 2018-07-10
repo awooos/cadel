@@ -4,6 +4,14 @@
 
 #include <stdio.h>
 
+uint8_t blah = 0;
+
+// Returns the absolute value of +n+.
+int64_t cadel_abs(int64_t n)
+{
+    return (n < 0) ? -n : n;
+}
+
 // Returns +y+ in
 //   y = (m * x) + b
 // where
@@ -61,7 +69,7 @@ void cadel_set_pixel(CadelDisplay *display, uint64_t x, uint64_t y)
     int64_t y_idx = (y - 1) * display->dimensions.width;
 
     // Set the pixel to 1, to enable it.
-    display->data[y_idx + x] = 1;
+    display->data[y_idx + x] = blah;//1;
 }
 
 // Renders a horizontal line to a CadelDisplay.
@@ -136,10 +144,26 @@ void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
     int64_t slope = cadel_slope(a, b);
     int64_t y_intercept = cadel_y_intercept(slope, a);
 
-    uint64_t y;
-    for (uint64_t x = a.x; x < b.x; x++) {
+    CadelPoint last = {a.x, a.y};
+    int64_t y;
+    for (int64_t x = a.x; x < b.x; x++) {
         y = cadel_y(slope, x, y_intercept);
-        cadel_set_pixel(display, x, y);
+
+        if (cadel_abs(last.y - y) <= 1) {
+            cadel_set_pixel(display, x, y);
+        } else if (cadel_abs(last.y - y) > 1) {
+        uint8_t old_blah = blah;
+        blah = blah + ('A' - '0') - 1;
+
+            int64_t new_y = y - (last.y - y);
+            cadel_rasterize_horizontal_line(display,
+                    cadel_point(x, y - 1),
+                    cadel_point(x, new_y));
+        blah = old_blah;
+        }
+
+        last.x = x;
+        last.y = y;
     }
 }
 
@@ -148,6 +172,7 @@ void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
     CadelPoint *points = graph->points;
 
     for (size_t idx = 1; idx < graph->size; idx++) {
+        blah = idx;
         cadel_rasterize_line(display, points[idx - 1], points[idx]);
     }
 }
