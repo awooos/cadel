@@ -19,7 +19,7 @@ int64_t cadel_abs(int64_t n)
 //   x is the x coordinate
 //   y is the y coordinate
 //   b is the y intercept
-int64_t cadel_y(int64_t slope, int64_t x, int64_t y_intercept)
+int64_t cadel_y(float slope, int64_t x, int64_t y_intercept)
 {
     return (slope * x) + y_intercept;
 }
@@ -31,7 +31,7 @@ int64_t cadel_y(int64_t slope, int64_t x, int64_t y_intercept)
 //   x is the x coordinate
 //   y is the y coordinate
 //   b is the y intercept
-int64_t cadel_y_intercept(int64_t slope, CadelPoint point)
+int64_t cadel_y_intercept(float slope, CadelPoint point)
 {
     return (point.y - (slope * point.x));
 }
@@ -44,19 +44,9 @@ int64_t cadel_y_intercept(int64_t slope, CadelPoint point)
 //   (x2, y2) is the second coordinate
 //
 // WARNING: Equivalent x coordinates will cause a division-by-zero error.
-int64_t cadel_slope(CadelPoint a, CadelPoint b)
+float cadel_slope(CadelPoint a, CadelPoint b)
 {
-    int64_t x1 = a.x;
-    int64_t y1 = a.y;
-    int64_t x2 = b.x;
-    int64_t y2 = b.y;
-
-    int64_t diff_y = (y2 - y1);
-    int64_t diff_x = (x2 - x1);
-
-    // Integer division truncates decimals,
-    // so we use modulo to compensate for it.
-    return (diff_y / diff_x) + ((diff_y % diff_x) / 2);
+    return (float)(b.y - a.y) / (b.x - a.x);
 }
 
 // Set the pixel at the specified (x, y) coordinates on a CadelDisplay.
@@ -120,17 +110,13 @@ void cadel_rasterize_sloped_line(CadelDisplay *display, CadelPoint a,
         return;
     }
 
-    // If we get this far, the following are all true:
-    // 1. +a.x <  b.x+
-    // 2. +a.y != b.y+
-
     // To generate the +y+ coordinate that goes with a given +x+ coordinate,
     // use the slope-intercept form of a linear equation:
     //   y = mx+b
     // which can be rewritten as:
     //   y = (slope * x) + y_intercept
 
-    int64_t slope = cadel_slope(a, b);
+    float slope = cadel_slope(a, b);
     int64_t y_intercept = cadel_y_intercept(slope, a);
 
     CadelPoint last = {a.x, a.y};
@@ -145,12 +131,7 @@ void cadel_rasterize_sloped_line(CadelDisplay *display, CadelPoint a,
             blah = blah + ('A' - '0') - 1;
 
             cadel_set_pixel(display, x, y);
-/*            int64_t y_diff = last.y - y;
-            int64_t new_y = y - y_diff;
-            cadel_rasterize_vertical_line(display,
-                    cadel_point(x, y),
-                    cadel_point(x, new_y));
-*/
+
             blah = old_blah;
         }
 
