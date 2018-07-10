@@ -69,7 +69,7 @@ void cadel_rasterize_line(CadelDisplay *display,
             continue;
         }
 
-        cadel_rasterize_vertical_line(display, x, last_y + 1, (y - last_y));
+        cadel_rasterize_vertical_line(display, x, y, last_y - y);
     }
 }
 
