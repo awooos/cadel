@@ -16,7 +16,7 @@ typedef struct cadel_canvas_s {
     int64_t height;
     uint8_t *data;
 } CadelCanvas;
-#define cadel_canvas(width, height) ((CadelCanvas){width, height, (uint8_t[width * height]){0,} })
+#define cadel_canvas(w, h) ((CadelCanvas){w, h, (uint8_t[w * h]){0,} })
 
 uint8_t cadel_get_pixel(CadelCanvas canvas, int64_t x, int64_t y);
 void cadel_clear(CadelCanvas canvas);
