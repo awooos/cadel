@@ -6,49 +6,6 @@
 
 uint8_t blah = 0;
 
-// Returns the absolute value of +n+.
-int64_t cadel_abs(int64_t n)
-{
-    return (n < 0) ? -n : n;
-}
-
-// Returns +y+ in
-//   y = (m * x) + b
-// where
-//   m is the slope
-//   x is the x coordinate
-//   y is the y coordinate
-//   b is the y intercept
-int64_t cadel_y(float slope, int64_t x, int64_t y_intercept)
-{
-    return (slope * x) + y_intercept;
-}
-
-// Returns +b+ in
-//   b = y - (m * x)
-// where
-//   m is the slope
-//   x is the x coordinate
-//   y is the y coordinate
-//   b is the y intercept
-int64_t cadel_y_intercept(float slope, CadelPoint point)
-{
-    return (point.y - (slope * point.x));
-}
-
-// Returns +m+ in
-//   m = (y1 - y2) / (x1 - x2)
-// where
-//   m is the slope
-//   (x1, y1) is the first coordinate
-//   (x2, y2) is the second coordinate
-//
-// WARNING: Equivalent x coordinates will cause a division-by-zero error.
-float cadel_slope(CadelPoint a, CadelPoint b)
-{
-    return (float)(b.y - a.y) / (b.x - a.x);
-}
-
 // Set the pixel at the specified (x, y) coordinates on a CadelDisplay.
 //
 // ASSUMPTION: All pixels you don't want rendered are already zero.
@@ -100,28 +57,33 @@ void cadel_rasterize_vertical_line(CadelDisplay *display,
     }
 }
 
-void cadel_rasterize_sloped_line(CadelDisplay *display, CadelPoint a,
-        CadelPoint b)
+void cadel_rasterize_sloped_line(CadelDisplay *display,
+        CadelPoint l,
+        CadelPoint r)
 {
-    // If +b+ is to the right of +a+, just swap them and render it.
+    // If +l+ is to the right of +r+, just swap them and render it.
     // This lets us assume we're always going left-to-right later on.
-    if (a.x > b.x) {
-        cadel_rasterize_sloped_line(display, b, a);
+    if (l.x > r.x) {
+        cadel_rasterize_sloped_line(display, r, l);
         return;
     }
 
     // To generate the +y+ coordinate that goes with a given +x+ coordinate,
     // use the slope-intercept form of a linear equation:
     //   y = mx+b
-    // which can be rewritten as:
-    //   y = (slope * x) + y_intercept
+    // where
+    //   x = x coordinate
+    //   y = y coordinate
+    //   m = slope
+    //   b = y-intercept
 
-    float slope = cadel_slope(a, b);
-    int64_t y_intercept = cadel_y_intercept(slope, a);
+    double  m = (double)(r.y - l.y) / (r.x - l.x);
+    int64_t b = l.y - (m * l.x);
 
     int64_t y;
-    for (int64_t x = a.x; x <= b.x; x++) {
-        y = cadel_y(slope, x, y_intercept);
+    for (int64_t x = l.x; x <= r.x; x++) {
+        y = (m * x) + b;
+        printf("%li = (%f * %li) + %li\n", y, m, x, b);
         cadel_set_pixel(display, x, y);
     }
 
