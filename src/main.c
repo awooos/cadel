@@ -110,24 +110,13 @@ void cadel_rasterize_vertical_line(CadelDisplay *display,
     }
 }
 
-void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
+void cadel_rasterize_sloped_line(CadelDisplay *display, CadelPoint a,
+        CadelPoint b)
 {
-    // Handle horizontal lines.
-    if (a.x == b.x) {
-        cadel_rasterize_horizontal_line(display, a, b);
-        return;
-    }
-
-    // Handle vertical lines.
-    if (a.y == b.y) {
-        cadel_rasterize_vertical_line(display, a, b);
-        return;
-    }
-
     // If +b+ is to the right of +a+, just swap them and render it.
     // This lets us assume we're always going left-to-right later on.
     if (a.x > b.x) {
-        cadel_rasterize_line(display, b, a);
+        cadel_rasterize_sloped_line(display, b, a);
         return;
     }
 
@@ -164,6 +153,24 @@ void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
 
         last_y = y;
     }
+
+}
+
+void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
+{
+    // Handle horizontal lines.
+    if (a.x == b.x) {
+        cadel_rasterize_horizontal_line(display, a, b);
+        return;
+    }
+
+    // Handle vertical lines.
+    if (a.y == b.y) {
+        cadel_rasterize_vertical_line(display, a, b);
+        return;
+    }
+
+    cadel_rasterize_sloped_line(display, a, b);
 }
 
 void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
