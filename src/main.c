@@ -33,7 +33,7 @@ void cadel_render_vertical_line(CadelDisplay *display,
     }
 
     for (int64_t idx = 0; idx < length; idx++) {
-        cadel_set_pixel(display, x, y + i, 1);
+        cadel_set_pixel(display, x, y + idx, 1);
     }
 }
 
