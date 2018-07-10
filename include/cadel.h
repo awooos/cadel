@@ -29,6 +29,6 @@ typedef struct cadel_display_s {
 } CadelDisplay;
 #define cadel_display(width, height) ((CadelDisplay){ {width, height}, (uint8_t[width * height]){0,} })
 
-void cadel_rasterize(CadelDisplay *display, CadelGraph *graph);
+void cadel_render(CadelDisplay *display, CadelGraph *graph);
 
 #endif

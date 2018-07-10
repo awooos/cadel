@@ -20,7 +20,7 @@ int main()
         printf("triangle.points[%lu] = {%lu, %lu}\n", i, point->x, point->y);
     }*/
 
-    cadel_rasterize(&display, &triangle);
+    cadel_render(&display, &triangle);
 
     printf("01234567890123456789\n");
     for (size_t y = 0; y < display.dimensions.height; y++) {

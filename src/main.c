@@ -2,10 +2,9 @@
 #include <stdint.h>
 #include <stddef.h>
 
-// Set the pixel at the specified (x, y) coordinates on a CadelDisplay.
-//
-// ASSUMPTION: All pixels you don't want rendered are already zero.
-void cadel_set_pixel(CadelDisplay *display, uint64_t x, uint64_t y)
+// Set the pixel at +(x, y)+ on a CadelDisplay to +val+.
+void cadel_set_pixel(CadelDisplay *display, uint64_t x, uint64_t y,
+        uint8_t val)
 {
     // We use a one-dimensional array to index a two-dimensional plane.
     // Multiply the vertical coordinate by the width to account for this.
@@ -16,24 +15,22 @@ void cadel_set_pixel(CadelDisplay *display, uint64_t x, uint64_t y)
 }
 
 // Renders a vertical line to a CadelDisplay.
-void cadel_rasterize_vertical_line(CadelDisplay *display,
+void cadel_render_vertical_line(CadelDisplay *display,
         int64_t x, int64_t y, int64_t length)
 {
     int64_t offset = (length > 0) ? +1 : -1;
 
     for (int64_t i = 0; i != length; i += offset) {
-        cadel_set_pixel(display, x, y + i);
+        cadel_set_pixel(display, x, y + i, 1);
     }
 }
 
-void cadel_rasterize_line(CadelDisplay *display,
-        CadelPoint l,
-        CadelPoint r)
+void cadel_render_line(CadelDisplay *display, CadelPoint l, CadelPoint r)
 {
     // If +l+ is to the right of +r+, just swap them and render it.
     // This lets us assume we're always going left-to-right later on.
     if (l.x > r.x) {
-        cadel_rasterize_line(display, r, l);
+        cadel_render_line(display, r, l);
         return;
     }
 
@@ -55,16 +52,25 @@ void cadel_rasterize_line(CadelDisplay *display,
         last_y = (m * (x - 1)) + b;
         y = (m * x) + b;
 
-        cadel_set_pixel(display, x, y);
-        cadel_rasterize_vertical_line(display, x, y, last_y - y);
+        cadel_set_pixel(display, x, y, 1);
+        cadel_render_vertical_line(display, x, y, last_y - y);
     }
 }
 
-void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
+void cadel_clear(CadelDisplay *display)
+{
+    for (int64_t y = 0; y < display->dimensions.height; y++) {
+        for (int64_t x = 0; x < display->dimensions.width; x++) {
+            cadel_set_pixel(display, x, y, 0);
+        }
+    }
+}
+
+void cadel_render(CadelDisplay *display, CadelGraph *graph)
 {
     CadelPoint *points = graph->points;
 
     for (size_t idx = 1; idx < graph->size; idx++) {
-        cadel_rasterize_line(display, points[idx - 1], points[idx]);
+        cadel_render_line(display, points[idx - 1], points[idx]);
     }
 }
