@@ -14,9 +14,9 @@ int main()
         { {2, 15}, {6, 2}, {6, 18} }
     };
 
-    for (uint32_t i = 0; i < triangle.size; i++) {
+    for (size_t i = 0; i < triangle.size; i++) {
         CadelPoint *point = &(triangle.points[i]);
-        printf("triangle.points[%u] = {%u, %u}\n", i, point->x, point->y);
+        printf("triangle.points[%lu] = {%lu, %lu}\n", i, point->x, point->y);
     }
 
     cadel_rasterize(&display, &triangle);

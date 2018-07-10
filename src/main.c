@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include <stdio.h>
+
 // Returns +b+ in
 //   b = y - (m * x)
 // where
@@ -9,7 +11,7 @@
 //   x is the x coordinate
 //   y is the y coordinate
 //   b is the y intercept
-uint32_t cadel_y_intercept(uint32_t slope, CadelPoint point)
+int64_t cadel_y_intercept(int64_t slope, CadelPoint point)
 {
     return (point.y - (slope * point.x));
 }
@@ -35,11 +37,11 @@ int64_t cadel_slope(CadelPoint a, CadelPoint b)
 // Set the pixel at the specified (x, y) coordinates on a CadelDisplay.
 //
 // ASSUMPTION: All pixels you don't want rendered are already zero.
-void cadel_set_pixel(CadelDisplay *display, uint32_t x, uint32_t y)
+void cadel_set_pixel(CadelDisplay *display, uint64_t x, uint64_t y)
 {
     // We use a one-dimensional array to index a two-dimensional plane.
     // Multiply the vertical coordinate by the width to account for this.
-    uint32_t y_idx = (y - 1) * display->dimensions.width;
+    int64_t y_idx = (y - 1) * display->dimensions.width;
 
     // Set the pixel to 1, to enable it.
     display->data[y_idx + x] = 1;
@@ -54,8 +56,8 @@ void cadel_rasterize_horizontal_line(CadelDisplay *display,
         CadelPoint a,
         CadelPoint b)
 {
-    int32_t offset = ((a.y - b.y) > 0) ? 1 : -1;
-    for (uint32_t y = a.y; y != b.y; y += offset) {
+    int64_t offset = ((a.y - b.y) > 0) ? 1 : -1;
+    for (uint64_t y = a.y; y != b.y; y += offset) {
         cadel_set_pixel(display, a.x, y);
     }
 }
@@ -70,7 +72,7 @@ void cadel_rasterize_vertical_line(CadelDisplay *display,
         CadelPoint b)
 {
     int32_t offset = ((a.x - b.x) > 0) ? 1 : -1;
-    for (uint32_t x = a.x; x != b.x; x += offset) {
+    for (uint64_t x = a.x; x != b.x; x += offset) {
         cadel_set_pixel(display, x, a.y);
     }
 }
@@ -106,23 +108,19 @@ void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
     // which can be rewritten as:
     //   y = (slope * x) + y_intercept
 
-    uint32_t slope = cadel_slope(a, b);
-    uint32_t y_intercept = cadel_y_intercept(slope, a);
+    int64_t slope = cadel_slope(a, b);
+    int64_t y_intercept = cadel_y_intercept(slope, a);
 
-    uint32_t y;
-    printf("\n\n");
-    for (uint32_t x = a.x; x < b.x; x++) {
-        printf("slope = %u\nx     = %u\nb     = %u\n", slope, x, y_intercept);
+    uint64_t y;
+    for (uint64_t x = a.x; x < b.x; x++) {
         y = (slope * x) + y_intercept;
-        printf("y     = %u\n\n", y);
-        //printf("Rendering: (%u, %u)\n", x, y);
-        //cadel_set_pixel(display, x, y);
+        printf("Rendering: (%li, %li)\n", x, y);
+        cadel_set_pixel(display, x, y);
 
         if (y == b.y) {
             break;
         }
     }
-    printf("\n\n");
 }
 
 void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)

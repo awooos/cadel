@@ -4,8 +4,8 @@
 #include <stdint.h>
 
 typedef struct cadel_point_s {
-    uint32_t x;
-    uint32_t y;
+    uint64_t x;
+    uint64_t y;
 } CadelPoint;
 #define cadel_point(x, y) ((CadelPoint){x, y})
 
@@ -16,15 +16,15 @@ typedef struct cadel_line_s {
 #define cadel_line(a, b) ((CadelLine){a, b})
 
 typedef struct cadel_dimensions_s {
-    uint32_t width;
-    uint32_t height;
+    uint64_t width;
+    uint64_t height;
 } CadelDimensions;
 #define cadel_dimensions(width, height) ((CadelDimensions){width, height})
 
 typedef CadelPoint CadelPointList[1024];
 typedef struct cadel_graph_s {
     CadelDimensions dimensions;
-    uint32_t size;
+    uint64_t size;
     CadelPoint points[1024];
 } CadelGraph;
 #define cadel_graph(dimensions, size, ...) ((CadelGraph){dimensions, size, {__VA_ARGS__}})
