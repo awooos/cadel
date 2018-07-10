@@ -27,10 +27,6 @@ int32_t cadel_slope(CadelPoint a, CadelPoint b)
     uint32_t x2 = b.x;
     uint32_t y2 = b.y;
 
-    if (y1 > y2) {
-        return cadel_slope(b, a);
-    }
-
     return (y2 - y1) / (x2 - x1);
 }
 
@@ -49,46 +45,56 @@ void cadel_set_pixel(CadelDisplay *display, uint32_t x, uint32_t y)
     display->data[y_idx + x] = 1;
 }
 
-void cadel_rasterize_horizontal_line(CadelDisplay *display, CadelLine line)
+void cadel_rasterize_horizontal_line(CadelDisplay *display,
+        CadelPoint a,
+        CadelPoint b)
 {
-    CadelPoint a = line.a;
-    CadelPoint b = line.b;
-
     int32_t offset = ((a.y - b.y) > 0) ? 1 : -1;
     for (uint32_t y = a.y; y != b.y; y += offset) {
         cadel_set_pixel(display, a.x, y);
     }
 }
 
-void cadel_rasterize_vertical_line(CadelDisplay *display, CadelLine line)
+void cadel_rasterize_vertical_line(CadelDisplay *display,
+        CadelPoint a,
+        CadelPoint b)
 {
-    CadelPoint a = line.a;
-    CadelPoint b = line.b;
-
     int32_t offset = ((a.x - b.x) > 0) ? 1 : -1;
     for (uint32_t x = a.x; x != b.x; x += offset) {
         cadel_set_pixel(display, x, a.y);
     }
 }
 
-void cadel_rasterize_line(CadelDisplay *display, CadelLine line)
+void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
 {
-    CadelPoint a = line.a;
-    CadelPoint b = line.b;
-
     // Handle horizontal lines.
     if (a.x == b.x) {
-        cadel_rasterize_horizontal_line(display, line);
+        cadel_rasterize_horizontal_line(display, a, b);
         return;
     }
 
     // Handle vertical lines.
     if (a.y == b.y) {
-        cadel_rasterize_vertical_line(display, line);
+        cadel_rasterize_vertical_line(display, a, b);
         return;
     }
 
-    // TODO: Handle everything else.
+    if (a.x > b.x) {
+        cadel_rasterize_line(display, b, a);
+        return;
+    }
+
+    // need:
+    // - slope
+    // - y intercept
+    //
+    // y = mx+b
+    //
+    // m = (y1 - y2) / (x1 - x2)
+    // b = y - mx
+    // y = mx + b
+    uint32_t slope       /* m */ = cadel_slope(a, b);
+    uint32_t y_intercept /* b */ = cadel_y_intercept(slope, a);
 }
 
 void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
@@ -96,8 +102,6 @@ void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
     CadelPoint *points = graph->points;
 
     for (size_t gidx = 1; gidx < graph->size; gidx++) {
-        CadelLine line = cadel_line(points[gidx - 1], points[gidx]);
-
-        cadel_rasterize_line(display, line);
+        cadel_rasterize_line(display, points[gidx - 1], points[gidx]);
     }
 }
