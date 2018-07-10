@@ -1,27 +1,27 @@
 #include <cadel.h>
 #include <stdint.h>
 
-uint64_t cadel_pixel_index(CadelDisplay display, int64_t x, int64_t y)
+uint64_t cadel_pixel_index(CadelImage image, int64_t x, int64_t y)
 {
     // We use a one-dimensional array to index a two-dimensional plane.
     // Multiply the vertical coordinate by the width to account for this.
-    return (y * display.width) + x;
+    return (y * image.width) + x;
 }
 
-// Get the value of the pixel at +(x, y)+ on +display+.
-uint8_t cadel_get_pixel(CadelDisplay display, int64_t x, int64_t y)
+// Get the value of the pixel at +(x, y)+ on +image+.
+uint8_t cadel_get_pixel(CadelImage image, int64_t x, int64_t y)
 {
-    return display.data[cadel_pixel_index(display, x, y)];
+    return image.data[cadel_pixel_index(image, x, y)];
 }
 
-// Set the value of the pixel at +(x, y)+ on +display+ to +val+.
-void cadel_set_pixel(CadelDisplay display, int64_t x, int64_t y, int8_t val)
+// Set the value of the pixel at +(x, y)+ on +image+ to +val+.
+void cadel_set_pixel(CadelImage image, int64_t x, int64_t y, int8_t val)
 {
-    display.data[cadel_pixel_index(display, x, y)] = val;
+    image.data[cadel_pixel_index(image, x, y)] = val;
 }
 
-// Renders a vertical line to a CadelDisplay.
-void cadel_render_vertical_line(CadelDisplay display,
+// Renders a vertical line to a CadelImage.
+void cadel_render_vertical_line(CadelImage image,
         int64_t x, int64_t y, int64_t length)
 {
     // If we get a negative length, then invert
@@ -32,15 +32,15 @@ void cadel_render_vertical_line(CadelDisplay display,
     }
 
     for (int64_t idx = 0; idx < length; idx++) {
-        cadel_set_pixel(display, x, y + idx, 1);
+        cadel_set_pixel(image, x, y + idx, 1);
     }
 }
 
-void cadel_render_line(CadelDisplay display, CadelPoint l, CadelPoint r)
+void cadel_render_line(CadelImage image, CadelPoint l, CadelPoint r)
 {
     // Ensure +l+ is to the left of +r+ by swapping argument order if needed.
     if (l.x > r.x) {
-        cadel_render_line(display, r, l);
+        cadel_render_line(image, r, l);
         return;
     }
 
@@ -54,22 +54,22 @@ void cadel_render_line(CadelDisplay display, CadelPoint l, CadelPoint r)
         int64_t y = (m * x) + b;
 
         // Draw the exact pixel.
-        cadel_set_pixel(display, x, y, 1);
+        cadel_set_pixel(image, x, y, 1);
         // Draw adjacent pixels if needed.
-        cadel_render_vertical_line(display, x, y, last_y - y);
+        cadel_render_vertical_line(image, x, y, last_y - y);
     }
 }
 
-void cadel_clear(CadelDisplay display)
+void cadel_clear(CadelImage image)
 {
-    for (uint64_t i = 0; i < (display.width * display.height); i++) {
-        display.data[i] = 0;
+    for (uint64_t i = 0; i < (image.width * image.height); i++) {
+        image.data[i] = 0;
     }
 }
 
-void cadel_render(CadelDisplay display, CadelObject points)
+void cadel_render(CadelImage image, CadelObject points)
 {
     for (uint64_t idx = 1; !points[idx].terminus; idx++) {
-        cadel_render_line(display, points[idx - 1], points[idx]);
+        cadel_render_line(image, points[idx - 1], points[idx]);
     }
 }
