@@ -2,16 +2,25 @@
 #include <stdint.h>
 #include <stddef.h>
 
-// Set the pixel at +(x, y)+ on a CadelDisplay to +val+.
-void cadel_set_pixel(CadelDisplay *display, uint64_t x, uint64_t y,
-        uint8_t val)
+uint64_t cadel_pixel_index(CadelDisplay *display, int64_t x, int64_t y)
 {
     // We use a one-dimensional array to index a two-dimensional plane.
     // Multiply the vertical coordinate by the width to account for this.
     uint64_t y_idx = y * display->dimensions.width;
 
-    // Set the pixel to 1, to enable it.
-    display->data[y_idx + x] = 1;
+    return y_idx + x;
+}
+
+// Get the value of the pixel at +(x, y)+ on +display+.
+uint8_t cadel_get_pixel(CadelDisplay *display, int64_t x, int64_t y)
+{
+    return display->data[cadel_pixel_index(display, x, y)];
+}
+
+// Set the pixel at +(x, y)+ on +display+ to +val+.
+void cadel_set_pixel(CadelDisplay *display, int64_t x, int64_t y, int8_t val)
+{
+    display->data[cadel_pixel_index(display, x, y)] = val;
 }
 
 // Renders a vertical line to a CadelDisplay.
