@@ -14,11 +14,6 @@ static CadelPoint CADEL_TERMINUS = {0, 0, 1};
 typedef CadelPoint CadelObject[1024];
 #define cadel_object(...) {__VA_ARGS__, CADEL_TERMINUS}
 
-typedef struct cadel_dimensions_s {
-    int64_t width;
-    int64_t height;
-} CadelDimensions;
-
 typedef struct cadel_display_s {
     int64_t width;
     int64_t height;
