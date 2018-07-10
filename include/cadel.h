@@ -11,15 +11,15 @@ typedef struct cadel_point_s {
 typedef CadelPoint CadelObject[1024];
 #define cadel_object(...) {__VA_ARGS__, {0, 0, 1}}
 
-typedef struct cadel_image_s {
+typedef struct cadel_canvas_s {
     int64_t width;
     int64_t height;
     uint8_t *data;
-} CadelImage;
-#define cadel_image(width, height) ((CadelImage){width, height, (uint8_t[width * height]){0,} })
+} CadelCanvas;
+#define cadel_canvas(width, height) ((CadelCanvas){width, height, (uint8_t[width * height]){0,} })
 
-uint8_t cadel_get_pixel(CadelImage image, int64_t x, int64_t y);
-void cadel_clear(CadelImage image);
-void cadel_render(CadelImage image, CadelObject points);
+uint8_t cadel_get_pixel(CadelCanvas canvas, int64_t x, int64_t y);
+void cadel_clear(CadelCanvas canvas);
+void cadel_render(CadelCanvas canvas, CadelObject points);
 
 #endif

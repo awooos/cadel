@@ -6,7 +6,7 @@
 
 int main()
 {
-    CadelImage image = cadel_image(20, 10);
+    CadelCanvas canvas = cadel_canvas(20, 10);
 
     CadelObject triangle = cadel_object(
         {15, 2},
@@ -14,12 +14,12 @@ int main()
         {18, 6},
         {15, 2});
 
-    cadel_clear(image);
-    cadel_render(image, triangle);
+    cadel_clear(canvas);
+    cadel_render(canvas, triangle);
 
-    for (size_t y = 0; y < image.height; y++) {
-        for (size_t x = 0; x < image.width; x++) {
-            if (cadel_get_pixel(image, x, y) == 0) {
+    for (size_t y = 0; y < canvas.height; y++) {
+        for (size_t x = 0; x < canvas.width; x++) {
+            if (cadel_get_pixel(canvas, x, y) == 0) {
                 printf("-");
             } else {
                 printf("X");
