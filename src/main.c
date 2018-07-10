@@ -6,9 +6,7 @@ uint64_t cadel_pixel_index(CadelDisplay *display, int64_t x, int64_t y)
 {
     // We use a one-dimensional array to index a two-dimensional plane.
     // Multiply the vertical coordinate by the width to account for this.
-    uint64_t y_idx = y * display->dimensions.width;
-
-    return y_idx + x;
+    return (y * display->dimensions.width) + x;
 }
 
 // Get the value of the pixel at +(x, y)+ on +display+.
@@ -17,7 +15,7 @@ uint8_t cadel_get_pixel(CadelDisplay *display, int64_t x, int64_t y)
     return display->data[cadel_pixel_index(display, x, y)];
 }
 
-// Set the pixel at +(x, y)+ on +display+ to +val+.
+// Set the value of the pixel at +(x, y)+ on +display+ to +val+.
 void cadel_set_pixel(CadelDisplay *display, int64_t x, int64_t y, int8_t val)
 {
     display->data[cadel_pixel_index(display, x, y)] = val;
