@@ -46,5 +46,9 @@ int main()
     cadel_render_object(canvas, parallelogram);
     print_canvas(canvas);
 
+    printf("Clusterfuck (aka \"all of the above\"):\n");
+    cadel_render_object(canvas, triangle);
+    print_canvas(canvas);
+
     return 0;
 }
