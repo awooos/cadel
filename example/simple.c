@@ -34,10 +34,14 @@ int main()
             { 0, 8},
             { 6, 1});
 
+    printf("Triangle:\n");
+    printf("  (15, 2) - (2, 6) - (18, 6) - (15, 2)\n");
     cadel_clear(canvas);
     cadel_render_object(canvas, triangle);
     print_canvas(canvas);
 
+    printf("Parallelogram:\n");
+    printf("  (6, 1) - (18, 1) - (11, 8) - (0, 8) - (6, 1)\n");
     cadel_clear(canvas);
     cadel_render_object(canvas, parallelogram);
     print_canvas(canvas);
