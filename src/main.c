@@ -66,7 +66,7 @@ void cadel_set_pixel(CadelDisplay *display, uint64_t x, uint64_t y)
 {
     // We use a one-dimensional array to index a two-dimensional plane.
     // Multiply the vertical coordinate by the width to account for this.
-    uint64_t y_idx = (y - 1) * display->dimensions.width;
+    uint64_t y_idx = y * display->dimensions.width;
 
     // Set the pixel to 1, to enable it.
     display->data[y_idx + x] = blah;//1;
@@ -135,21 +135,25 @@ void cadel_rasterize_sloped_line(CadelDisplay *display, CadelPoint a,
 
     int64_t last_y = a.y;
     int64_t y;
-    for (int64_t x = a.x; x < b.x; x++) {
+    printf("(%lu, %lu) -> (%lu, %lu)\n", a.x, a.y, b.x, b.y);
+    printf("!! y  = (m  *  x) + b\n");
+    for (int64_t x = a.x; x <= b.x; x++) {
         y = cadel_y(slope, x, y_intercept);
 
-        if (cadel_abs(last_y - y) <= 1) {
+//        if (cadel_abs(last_y - y) <= 1) {
             cadel_set_pixel(display, x, y);
-        } else {
-        uint8_t old_blah = blah;
-        blah = blah + ('A' - '0') - 1;
+/*        } else {
+            uint8_t old_blah = blah;
+            blah = blah + ('A' - '0') - 1;
 
-            int64_t new_y = y - (last_y - y);
+            int64_t y_diff = last_y - y;
+            int64_t new_y = y - y_diff;
             cadel_rasterize_horizontal_line(display,
-                    cadel_point(x, y - 1),
-                    cadel_point(x, new_y));
-        blah = old_blah;
-        }
+                    cadel_point(x, y - y_diff),
+                    cadel_point(x, y));
+
+            blah = old_blah;
+        }*/
 
         last_y = y;
     }
@@ -179,6 +183,8 @@ void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
 
     for (size_t idx = 1; idx < graph->size; idx++) {
         blah = idx;
+        printf("line %lu: ", idx);
         cadel_rasterize_line(display, points[idx - 1], points[idx]);
+        printf("\n");
     }
 }

@@ -6,13 +6,13 @@
 
 int main()
 {
-    CadelDisplay display = cadel_display(10, 20);
+    CadelDisplay display = cadel_display(20, 10);
 
     CadelGraph triangle = (CadelGraph){
         display.dimensions,
         4,
-        { {2, 15}, {6, 2}, {6, 18},
-          {2, 15} }
+        { {15, 2}, {2, 6}, {18, 6},
+          {15, 2} }
     };
 
     for (size_t i = 0; i < triangle.size; i++) {
@@ -23,8 +23,8 @@ int main()
     cadel_rasterize(&display, &triangle);
 
     printf("01234567890123456789\n");
-    for (size_t x = 0; x < display.dimensions.width; x++) {
-        for (size_t y = 0; y < display.dimensions.height; y++) {
+    for (size_t y = 0; y < display.dimensions.height; y++) {
+        for (size_t x = 0; x < display.dimensions.width; x++) {
             if (display.data[x + (y * triangle.dimensions.width)] == 0) {
                 printf("-");
             } else {
