@@ -133,29 +133,29 @@ void cadel_rasterize_sloped_line(CadelDisplay *display, CadelPoint a,
     int64_t slope = cadel_slope(a, b);
     int64_t y_intercept = cadel_y_intercept(slope, a);
 
-    int64_t last_y = a.y;
+    CadelPoint last = {a.x, a.y};
     int64_t y;
-    printf("(%lu, %lu) -> (%lu, %lu)\n", a.x, a.y, b.x, b.y);
-    printf("!! y  = (m  *  x) + b\n");
     for (int64_t x = a.x; x <= b.x; x++) {
         y = cadel_y(slope, x, y_intercept);
 
-//        if (cadel_abs(last_y - y) <= 1) {
+        if (cadel_abs(last.y - y) <= 1) {
             cadel_set_pixel(display, x, y);
-/*        } else {
+        } else {
             uint8_t old_blah = blah;
             blah = blah + ('A' - '0') - 1;
 
-            int64_t y_diff = last_y - y;
+            cadel_set_pixel(display, x, y);
+/*            int64_t y_diff = last.y - y;
             int64_t new_y = y - y_diff;
-            cadel_rasterize_horizontal_line(display,
-                    cadel_point(x, y - y_diff),
-                    cadel_point(x, y));
-
+            cadel_rasterize_vertical_line(display,
+                    cadel_point(x, y),
+                    cadel_point(x, new_y));
+*/
             blah = old_blah;
-        }*/
+        }
 
-        last_y = y;
+        last.x = x;
+        last.y = y;
     }
 
 }
@@ -183,8 +183,6 @@ void cadel_rasterize(CadelDisplay *display, CadelGraph *graph)
 
     for (size_t idx = 1; idx < graph->size; idx++) {
         blah = idx;
-        printf("line %lu: ", idx);
         cadel_rasterize_line(display, points[idx - 1], points[idx]);
-        printf("\n");
     }
 }
