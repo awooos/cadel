@@ -14,20 +14,20 @@ static CadelPoint CADEL_TERMINUS = {0, 0, 1};
 typedef CadelPoint CadelObject[1024];
 #define cadel_object(...) {__VA_ARGS__, CADEL_TERMINUS}
 
-
 typedef struct cadel_dimensions_s {
     int64_t width;
     int64_t height;
 } CadelDimensions;
 
 typedef struct cadel_display_s {
-    CadelDimensions dimensions;
+    int64_t width;
+    int64_t height;
     uint8_t *data;
 } CadelDisplay;
-#define cadel_display(width, height) ((CadelDisplay){ {width, height}, (uint8_t[width * height]){0,} })
+#define cadel_display(width, height) ((CadelDisplay){width, height, (uint8_t[width * height]){0,} })
 
-uint8_t cadel_get_pixel(CadelDisplay *display, int64_t x, int64_t y);
-void cadel_clear(CadelDisplay *display);
-void cadel_render(CadelDisplay *display, CadelPoint points[]);
+uint8_t cadel_get_pixel(CadelDisplay display, int64_t x, int64_t y);
+void cadel_clear(CadelDisplay display);
+void cadel_render(CadelDisplay display, CadelPoint points[]);
 
 #endif
