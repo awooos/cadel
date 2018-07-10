@@ -144,26 +144,25 @@ void cadel_rasterize_line(CadelDisplay *display, CadelPoint a, CadelPoint b)
     int64_t slope = cadel_slope(a, b);
     int64_t y_intercept = cadel_y_intercept(slope, a);
 
-    CadelPoint last = {a.x, a.y};
+    int64_t last_y = a.y;
     int64_t y;
     for (int64_t x = a.x; x < b.x; x++) {
         y = cadel_y(slope, x, y_intercept);
 
-        if (cadel_abs(last.y - y) <= 1) {
+        if (cadel_abs(last_y - y) <= 1) {
             cadel_set_pixel(display, x, y);
-        } else if (cadel_abs(last.y - y) > 1) {
+        } else if (cadel_abs(last_y - y) > 1) {
         uint8_t old_blah = blah;
         blah = blah + ('A' - '0') - 1;
 
-            int64_t new_y = y - (last.y - y);
+            int64_t new_y = y - (last_y - y);
             cadel_rasterize_horizontal_line(display,
                     cadel_point(x, y - 1),
                     cadel_point(x, new_y));
         blah = old_blah;
         }
 
-        last.x = x;
-        last.y = y;
+        last_y = y;
     }
 }
 
