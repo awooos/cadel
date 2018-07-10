@@ -71,10 +71,9 @@ void cadel_render_line(CadelDisplay *display, CadelPoint l, CadelPoint r)
 
 void cadel_clear(CadelDisplay *display)
 {
-    for (int64_t y = 0; y < display->dimensions.height; y++) {
-        for (int64_t x = 0; x < display->dimensions.width; x++) {
-            cadel_set_pixel(display, x, y, 0);
-        }
+    CadelDimensions dimensions = display->dimensions;
+    for (uint64_t i = 0; i < (dimensions.width * dimensions.height); i++) {
+        display->data[i] = 0;
     }
 }
 

@@ -14,6 +14,7 @@ int main()
         {18, 6},
         {15, 2});
 
+    cadel_clear(&display);
     cadel_render(&display, triangle);
 
     for (size_t y = 0; y < display.dimensions.height; y++) {
