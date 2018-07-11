@@ -3,7 +3,6 @@
 
 #include <cadel.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 
 void print_canvas(CadelCanvas canvas) {
@@ -19,23 +18,61 @@ void print_canvas(CadelCanvas canvas) {
     }
 }
 
-#define rows 40
+#define rows 39
 #define cols 79
 
-CadelPoint a = {10, 30};
+CadelPoint a = {10, 20};
 CadelPoint b = {40, 10};
-CadelPoint c = {77, 12};
+CadelPoint c = {57, 12};
 
-void draw(CadelCanvas canvas, size_t m)
+CadelPoint rotate(CadelCanvas cs, CadelPoint p)
 {
-    a.x += m;
-    a.y -= m;
+    if (p.y <= (cs.height / 2)) { // top half.
+        if (p.x < (cs.width / 2)) {
+            // top-left quadrant.
+            if (p.x > 0) {
+                p.x--;
+            }
+            p.y++;
+        } else {
+            // top-right quadrant.
+            if (p.x < cs.width) {
+                p.x--;
+            }
+            if (p.y > 1) {
+                p.y--;
+            }
+        }
+    } else { // bottom half.
+        if (p.x < (cs.width / 2)) {
+            // bottom-left quadrant.
+            p.x++;
+            if (p.y < (cs.height - 1)) {
+                p.y++;
+            }
+        } else {
+            // bottom-right quadrant.
+            if (p.x < (cs.width - 1)) {
+                p.x++;
+            } else {
+                p.x--;
+            }
+            if (p.y < (cs.height * 4 / 3)) {
+                p.y--;
+            } else {
+                p.y++;
+            }
+        }
+    }
 
-    b.x -= m;
-    b.y += m;
+    return p;
+}
 
-    c.x -= m;
-    c.y += m;
+void draw(CadelCanvas canvas)
+{
+    a = rotate(canvas, a);
+    b = rotate(canvas, b);
+    c = rotate(canvas, c);
 
     CadelObject triangle = cadel_object(a, b, c, a);
 
@@ -43,22 +80,15 @@ void draw(CadelCanvas canvas, size_t m)
     cadel_render_object(canvas, triangle);
     print_canvas(canvas);
 
-    sleep(1);
+    usleep(50000);
 }
 
 int main(int argc, const char *argv[])
 {
     CadelCanvas canvas = cadel_canvas(cols, rows);
-    size_t max = 20;
 
-    size_t x = 0;
     while (1) {
-        for (; x < max; x++) {
-            draw(canvas, +1);
-        }
-        for (; x > -max; x--) {
-            draw(canvas, -1);
-        }
+        draw(canvas);
     }
 
     return 0;
