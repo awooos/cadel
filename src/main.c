@@ -3,7 +3,7 @@
 
 void cadel_clear(CadelCanvas canvas)
 {
-    for (uint64_t i = 0; i < (canvas.width * canvas.height); i++) {
+    for (int64_t i = 0; i < (canvas.width * canvas.height); i++) {
         canvas.data[i] = 0;
     }
 }
@@ -25,11 +25,11 @@ void cadel_render_line(CadelCanvas canvas, CadelPoint l, CadelPoint r)
     // Use the slope-intercept form of a linear equation (y = mx + b)
     // to generate +y+ coordinates for a given +x+ coordinate.
     double  m = (double)(r.y - l.y) / (r.x - l.x);
-    int64_t b = l.y - (m * l.x);
+    int64_t b = (int64_t)(l.y - (m * l.x));
 
     for (int64_t x = l.x + 1; x <= r.x; x++) {
-        int64_t last_y = (m * (x - 1)) + b;
-        int64_t y = (m * x) + b;
+        int64_t last_y = (int64_t)((m * (x - 1)) + b);
+        int64_t y = (int64_t)((m * x) + b);
 
         int64_t low  = (y > last_y) ? last_y : (y + 1);
         int64_t high = (y > last_y) ? y : (last_y + 1);

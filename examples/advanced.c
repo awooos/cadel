@@ -6,8 +6,8 @@
 #include <unistd.h>
 
 void print_canvas(CadelCanvas canvas) {
-    for (size_t y = 0; y < canvas.height; y++) {
-        for (size_t x = 0; x < canvas.width; x++) {
+    for (int64_t y = 0; y < canvas.height; y++) {
+        for (int64_t x = 0; x < canvas.width; x++) {
             if (cadel_get_pixel(canvas, x, y) == 0) {
                 printf(" ");
             } else {
@@ -83,7 +83,7 @@ void draw(CadelCanvas canvas)
     usleep(30000);
 }
 
-int main(int argc, const char *argv[])
+int main()
 {
     CadelCanvas canvas = cadel_canvas(cols, rows);
 
