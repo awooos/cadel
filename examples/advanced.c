@@ -80,7 +80,7 @@ void draw(CadelCanvas canvas)
     cadel_render_object(canvas, triangle);
     print_canvas(canvas);
 
-    usleep(50000);
+    usleep(30000);
 }
 
 int main(int argc, const char *argv[])
