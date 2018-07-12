@@ -6,10 +6,11 @@
 typedef struct cadel_point_s {
     int64_t x;
     int64_t y;
-    uint8_t terminus; // HACK: If you only specify +{x, y}+, this becomes 0.
 } CadelPoint;
+static CadelPoint CADEL_TERMINUS = {-100, -100};
 typedef CadelPoint CadelObject[1024];
-#define cadel_object(...) {__VA_ARGS__, {0, 0, 1}}
+#define cadel_object(...) {__VA_ARGS__, CADEL_TERMINUS}
+#define cadel_terminus(point) ((point.x) == CADEL_TERMINUS.x && (point.y) == CADEL_TERMINUS.y)
 
 typedef struct cadel_canvas_s {
     int64_t width;

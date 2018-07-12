@@ -45,7 +45,7 @@ void cadel_render_line(CadelCanvas canvas, CadelPoint l, CadelPoint r)
 
 void cadel_render_object(CadelCanvas canvas, CadelObject points)
 {
-    for (uint64_t idx = 1; !points[idx].terminus; idx++) {
+    for (uint64_t idx = 1; !cadel_terminus(points[idx]); idx++) {
         cadel_render_line(canvas, points[idx - 1], points[idx]);
     }
 }
